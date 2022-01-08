@@ -3,7 +3,7 @@
 #include "common.h"
 
 typedef enum {
-  OP_REURN,
+  OP_RETURN,
 } OpCode;
 
 typedef struct {
