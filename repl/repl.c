@@ -3,13 +3,13 @@
 #include "debug.h"
 
 int main(int argc, const char **argv) {
-  Chunk chunk;
-  initChunk(&chunk);
-  writeChunk(&chunk, OP_RETURN);
+    Chunk chunk;
+    initChunk(&chunk);
+    writeChunk(&chunk, OP_RETURN);
 
-  disassembleChunk(&chunk, "test chunk");
+    disassembleChunk(&chunk, "test chunk");
 
-  freeChunk(&chunk);
+    freeChunk(&chunk);
 
-  return 0;
+    return 0;
 }
