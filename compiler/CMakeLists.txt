@@ -7,5 +7,6 @@ target_sources(Compiler
   memory.c
   chunk.c
   debug.c
+  value.c
   )
 
