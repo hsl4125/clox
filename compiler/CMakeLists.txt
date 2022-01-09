@@ -10,5 +10,6 @@ target_sources(Compiler
   chunk.c
   debug.c
   value.c
+  vm.c
   )
 
