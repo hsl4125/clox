@@ -1,6 +1,8 @@
 add_library(Compiler
   SHARED
+  ${HEADER_FILES}
   )
+
 
 target_sources(Compiler
   PRIVATE
