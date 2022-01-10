@@ -11,5 +11,7 @@ target_sources(Compiler
   debug.c
   value.c
   vm.c
+  compiler.c
+  scanner.c
   )
 
