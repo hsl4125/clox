@@ -13,5 +13,6 @@ target_sources(Compiler
   vm.c
   compiler.c
   scanner.c
+  object.c
   )
 
