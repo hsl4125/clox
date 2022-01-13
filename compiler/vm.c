@@ -81,6 +81,9 @@ static InterpretResult run() {
         case OP_FALSE:
             push(BOOL_VAL(false));
             break;
+        case OP_POP:
+            pop();
+            break;
         case OP_EQUAL: {
             Value b = pop();
             Value a = pop();
@@ -125,9 +128,14 @@ static InterpretResult run() {
             }
             push(NUMBER_VAL(-AS_NUMBER(pop())));
             break;
-        case OP_RETURN: {
+        case OP_PRINT: {
             printValue(pop());
             printf("\n");
+            break;
+        }
+        case OP_RETURN: {
+            // printValue(pop());
+            // printf("\n");
             return INTERPRET_OK;
         }
         }
@@ -149,9 +157,6 @@ InterpretResult interpret(const char *source) {
 
     vm.chunk = &chunk;
     vm.ip    = vm.chunk->code;
-
-    // TODO: temporary
-    writeChunk(&chunk, OP_RETURN, 1);
 
     InterpretResult result = run();
 
