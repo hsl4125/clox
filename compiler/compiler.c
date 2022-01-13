@@ -125,7 +125,7 @@ static void binary() {
     case TOKEN_BANG_EQUAL:
         emitBytes(OP_EQUAL, OP_NOT);
         break;
-    case TOKEN_EQUAL:
+    case TOKEN_EQUAL_EQUAL:
         emitByte(OP_EQUAL);
         break;
     case TOKEN_GREATER:
