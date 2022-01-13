@@ -14,5 +14,6 @@ target_sources(Compiler
   compiler.c
   scanner.c
   object.c
+  table.c
   )
 
