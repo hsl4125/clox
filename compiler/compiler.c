@@ -127,6 +127,14 @@ static void emitBytes(uint8_t byte1, uint8_t byte2) {
     emitByte(byte2);
 }
 
+static int emitJump(uint8_t instruction) {
+    emitByte(instruction);
+    // 16-bit offset
+    emitByte(0xff);
+    emitByte(0xff);
+    return currentChunk()->count - 2;
+}
+
 static void emitReturn() { emitByte(OP_RETURN); }
 
 static void endCompiler() {
@@ -153,6 +161,7 @@ static void endScope() {
 // forward declaration
 static void       expression();
 static void       statement();
+static void       ifStatement();
 static void       printStatement();
 static void       expressionStatement();
 static void       declaration();
@@ -237,6 +246,16 @@ static uint8_t makeConstant(Value value) {
 
 static void emitConstant(Value value) {
     emitBytes(OP_CONSTANT, makeConstant(value));
+}
+
+static void patchJump(int offset) {
+    int jump = currentChunk()->count - offset - 2;
+    if (jump > UINT16_MAX) {
+        error("Too much code to jump over.");
+    }
+
+    currentChunk()->code[ offset ]     = (jump >> 8) & 0xff;
+    currentChunk()->code[ offset + 1 ] = jump & 0xff;
 }
 
 static void number(bool canAssign) {
@@ -498,6 +517,8 @@ static void varDeclaration() {
 static void statement() {
     if (match(TOKEN_PRINT)) {
         printStatement();
+    } else if (match(TOKEN_IF)) {
+        ifStatement();
     } else if (match(TOKEN_LEFT_BRACE)) {
         beginScope();
         block();
@@ -517,6 +538,28 @@ static void expressionStatement() {
     expression();
     consume(TOKEN_SEMICOLON, "Expect ';' after expression.");
     emitByte(OP_POP);
+}
+
+// TODO: refactor -> merge OP_JUMP and OP_JUMP_IF_FALSE
+static void ifStatement() {
+    consume(TOKEN_LEFT_PAREN, "Expect '(' after 'if'.");
+    expression();
+    consume(TOKEN_RIGHT_PAREN, "Expect ')' after condition.");
+
+    int thenJump = emitJump(OP_JUMP_IF_FALSE);
+    emitByte(OP_POP);
+
+    statement();
+
+    int elseJump = emitJump(OP_JUMP);
+    emitByte(OP_POP);
+
+    patchJump(thenJump);
+
+    if (match(TOKEN_ELSE))
+        statement();
+
+    patchJump(elseJump);
 }
 
 bool compile(const char *source, Chunk *chunk) {
