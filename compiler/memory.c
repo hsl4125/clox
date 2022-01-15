@@ -32,6 +32,10 @@ static void freeObject(Obj *object) {
         FREE(ObjFunction, object);
         break;
     }
+    case OBJ_CLOSURE: {
+        FREE(ObjClosure, object);
+        break;
+    }
     case OBJ_NATIVE: {
         printf("<native fn>");
         break;
