@@ -3,7 +3,6 @@ add_library(Compiler
   ${HEADER_FILES}
   )
 
-
 target_sources(Compiler
   PRIVATE
   memory.c
@@ -17,3 +16,10 @@ target_sources(Compiler
   table.c
   )
 
+#[[ debug macro
+target_compile_definitions(Compiler
+  PRIVATE
+  -DDEBUG_PRINT_CODE
+  -DDEBUG_TRACE_EXECUTION
+  )
+]]
