@@ -60,10 +60,25 @@ ObjString *copyString(const char *chars, int length) {
     return allocateString(heapChars, length, hash);
 }
 
+ObjFunction *newFunction() {
+    ObjFunction *function = ALLOCATE_OBJ(ObjFunction, OBJ_FUNCTION);
+    function->arity       = 0;
+    function->name        = NULL;
+    initChunk(&function->chunk);
+    return function;
+}
+
+static void printFunction(ObjFunction *function) {
+    printf("<fn %s>", function->name->chars);
+}
+
 void printObject(Value value) {
     switch (OBJ_TYPE(value)) {
     case OBJ_STRING:
         printf("%s", AS_CSTRING(value));
+        break;
+    case OBJ_FUNCTION:
+        printFunction(AS_FUNCTION(value));
         break;
     }
 }
