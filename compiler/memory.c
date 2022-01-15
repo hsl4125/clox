@@ -2,6 +2,8 @@
 #include "common.h"
 #include "vm.h"
 
+#include <stdio.h>
+
 void *reallocate(void *ptr, size_t oldSize, size_t newSize) {
     if (newSize == 0) {
         free(ptr);
@@ -28,6 +30,10 @@ static void freeObject(Obj *object) {
         ObjFunction *function = (ObjFunction *) object;
         freeChunk(&function->chunk);
         FREE(ObjFunction, object);
+        break;
+    }
+    case OBJ_NATIVE: {
+        printf("<native fn>");
         break;
     }
     }
