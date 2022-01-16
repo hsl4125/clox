@@ -67,7 +67,7 @@ Parser    parser;
 Compiler *current = NULL;
 
 static void initCompiler(Compiler *compiler, FunctionType type) {
-    compiler->enclosing  = (struct Compiler *) current;
+    compiler->enclosing  = current;
     compiler->function   = NULL;
     compiler->localCount = 0;
     compiler->scopeDepth = 0;
@@ -500,7 +500,7 @@ static int resolveUpvalue(Compiler *compiler, Token *name) {
     if (compiler->enclosing == NULL)
         return -1;
 
-    int local = resolveLocal((Compiler *) compiler->enclosing, name);
+    int local = resolveLocal(compiler->enclosing, name);
     if (local != -1) {
         compiler->enclosing->locals[ local ].isCaptured = true;
         return addUpvalue(compiler, (uint8_t) local, true);
