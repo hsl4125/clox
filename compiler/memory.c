@@ -43,7 +43,7 @@ static void freeObject(Obj *object) {
         break;
     }
     case OBJ_NATIVE: {
-        printf("<native fn>");
+        //printf("free <native fn>\n");
         break;
     }
     }
