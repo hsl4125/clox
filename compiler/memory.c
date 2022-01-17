@@ -57,6 +57,10 @@ static void freeObject(Obj *object) {
         FREE(ObjClosure, object);
         break;
     }
+    case OBJ_CLASS: {
+        FREE(ObjClass, object);
+        break;
+    }
     case OBJ_UPVALUE: {
         FREE(ObjUpvalue, object);
         break;
@@ -94,12 +98,12 @@ void markObject(Obj *object) {
     if (vm.grayCapacity < vm.grayCount + 1) {
         vm.grayCapacity = GROW_CAPACITY(vm.grayCapacity);
         vm.grayStack =
-            (Obj **) realloc(vm.grayStack, sizeof(Obj*) * vm.grayCapacity);
+            (Obj **) realloc(vm.grayStack, sizeof(Obj *) * vm.grayCapacity);
     }
 
     if (vm.grayStack == NULL)
         exit(1);
-    
+
     vm.grayStack[ vm.grayCount++ ] = object;
 }
 
@@ -138,6 +142,11 @@ static void blackenObject(Obj *object) {
     case OBJ_UPVALUE:
         markValue(((ObjUpvalue *) object)->closed);
         break;
+    case OBJ_CLASS: {
+        ObjClass *klass = (ObjClass *) object;
+        markObject((Obj *) klass->name);
+        break;
+    }
     case OBJ_NATIVE:
     case OBJ_STRING:
         break;

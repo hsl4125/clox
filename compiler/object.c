@@ -106,6 +106,12 @@ ObjNative *newNative(NativeFn function) {
     return native;
 }
 
+ObjClass *newClass(ObjString *name) {
+    ObjClass *klass = ALLOCATE_OBJ(ObjClass, OBJ_CLASS);
+    klass->name     = name;
+    return klass;
+}
+
 static void printFunction(ObjFunction *function) {
     if (function->name == NULL) {
         printf("<script>");
@@ -129,6 +135,8 @@ void printObject(Value value) {
     case OBJ_UPVALUE:
         printf("upvalue");
         break;
+    case OBJ_CLASS:
+        printf("%s", AS_CLASS(value)->name->chars);
     case OBJ_NATIVE:
         // nothing
         break;
