@@ -21,5 +21,8 @@ target_compile_definitions(Compiler
   PRIVATE
   -DDEBUG_PRINT_CODE
   -DDEBUG_TRACE_EXECUTION
+  -DDEBUG_STRESS_GC
+  -DDEBUG_LOG_GC
   )
 ]]
+
