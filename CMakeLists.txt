@@ -9,6 +9,8 @@ file(GLOB_RECURSE HEADER_FILES *.h)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${HEADER_FILES})
 
 add_definitions("-Wall -g")
+#add_definitions("-DCMAKE_BUILD_TYPE=Release")
+#add_definitions("-O3")
 
 
 add_subdirectory(compiler)
