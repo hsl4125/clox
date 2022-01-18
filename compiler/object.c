@@ -112,6 +112,13 @@ ObjClass *newClass(ObjString *name) {
     return klass;
 }
 
+ObjInstance *newInstance(ObjClass *klass) {
+    ObjInstance *instance = ALLOCATE_OBJ(ObjInstance, OBJ_INSTANCE);
+    instance->klass       = klass;
+    initTable(&instance->fields);
+    return instance;
+}
+
 static void printFunction(ObjFunction *function) {
     if (function->name == NULL) {
         printf("<script>");
@@ -137,8 +144,12 @@ void printObject(Value value) {
         break;
     case OBJ_CLASS:
         printf("%s", AS_CLASS(value)->name->chars);
+        break;
+    case OBJ_INSTANCE:
+        printf("%s instance", AS_INSTANCE(value)->klass->name->chars);
+        break;
     case OBJ_NATIVE:
-        // nothing
+        printf("native type");
         break;
     }
 }
