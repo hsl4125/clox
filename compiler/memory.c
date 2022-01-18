@@ -73,6 +73,10 @@ static void freeObject(Obj *object) {
         FREE(ObjInstance, object);
         break;
     }
+    case OBJ_BOUND_METHOD: {
+        FREE(ObjBoundMethod, object);
+        break;
+    }
     case OBJ_NATIVE: {
         // printf("free <native fn>\n");
         break;
@@ -160,6 +164,12 @@ static void blackenObject(Obj *object) {
         ObjInstance *instance = (ObjInstance *) object;
         markObject((Obj *) instance->klass);
         markTable(&instance->fields);
+        break;
+    }
+    case OBJ_BOUND_METHOD: {
+        ObjBoundMethod *bound = (ObjBoundMethod *) object;
+        markValue(bound->receiver);
+        markObject((Obj *) bound->method);
         break;
     }
     case OBJ_NATIVE:
