@@ -408,7 +408,7 @@ static void variable(bool canAssign) {
     namedVariable(parser.previous, canAssign);
 }
 
-static Token synthetickToken(const char *text) {
+static Token syntheticToken(const char *text) {
     Token token;
     token.start  = text;
     token.length = (int) strlen(text);
@@ -721,7 +721,7 @@ static void classDeclaration() {
         }
 
         beginScope();
-        addLocal(synthetickToken("super"));
+        addLocal(syntheticToken("super"));
         defineVariable(0);
 
         namedVariable(className, false);
